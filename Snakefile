@@ -208,4 +208,4 @@ rule ode_modeling:
     resources: mem_mb=4000 if IS_HPC else 1500, runtime=15
     run:
         ext = f"python src/extract.py --input {{input.psi}} --target {{wildcards.gene}} --output {{output.sub}}" if PLATFORM == "short" else f"python src/extract_suppa.py --psi {{input.psi}} --gtf {GTF} --target {{wildcards.gene}} --output {{output.sub}}"
-        shell(f"mkdir -p {TARGET_DIR} {RESULTS_DIR} && {ext} && python src/run_pipeline.py --input {{output.sub}} --outdir {RESULTS_DIR} --samples {','.join(SAMPLES)} --fdr {float(config.get('fdr', 1.0))} --workers {{threads}}")
+        shell(f"mkdir -p {TARGET_DIR} {RESULTS_DIR} && {ext} && python src/run_pipeline.py --input {{output.sub}} --outdir {RESULTS_DIR} --samples {','.join(SAMPLES)} --fdr {float(config.get('fdr', 1.0))} --workers {{threads}} --backend {config.get('backend', 'auto')}")
