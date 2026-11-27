@@ -1,0 +1,19 @@
+samples:
+  - SRR4421393
+  # Add more samples here later (e.g., time-series or knockdown replicates):
+  # - SRR6357071
+  # - SRR6357072
+
+target_genes:
+  - FOXK2
+  # Add any other splicing factors or target genes:
+  # - SRSF1
+  # - PTBP1
+
+reference:
+  star_index: "refs/GRCh38_STAR_index"
+  gtf: "refs/GRCh38.annotation.gtf"
+
+resources:
+  threads: 4        # Increase to 16 on HPC
+  star_mem_mb: 5000 # Increase to 36000 on HPC

@@ -1,0 +1,23 @@
+name: splicing-kinetics
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.11
+  - numpy>=1.24
+  - scipy>=1.10
+  - pandas>=2.0
+  - matplotlib>=3.7
+  - pytorch>=2.2
+  - snakemake>=7.32
+  - rsync>=3.2
+  - fastp>=0.23
+  - star>=2.7.10
+  - minimap2>=2.28
+  - samtools>=1.18
+  - rmats>=4.3.0
+  - isoquant>=4.1.0
+  - stringtie>=2.2.1
+  - suppa>=2.4
+  - bbmap>=39.01
+  - sra-tools>=3.0.10

@@ -1,0 +1,3 @@
+target,event_id,group,sample_or_cohort,observed_psi,inferred_sf_activity,inferred_k_deg_inc,inferred_k_deg_skip,delta_psi,fdr
+FOXK2,FOXK2:exon_82582740-82582934,Control,Cont_1,0.99,4.9747,0.1319,0.3037,0.286,0.144836
+FOXK2,FOXK2:exon_82582740-82582934,Treatment,Trea_1,0.714,0.6099,0.1319,0.3037,0.286,0.144836

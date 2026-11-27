@@ -1,0 +1,11 @@
+data/
+refs/
+work/
+.snakemake/
+__pycache__/
+*.pyc
+*.bam
+*.bai
+*.fastq.gz
+*.fa
+*.gtf
