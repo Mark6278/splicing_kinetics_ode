@@ -1,7 +1,6 @@
-import os
+import json, os
 
 TMP = os.environ.get("TMPDIR", "/tmp")
-import json, os
 
 IS_HPC = str(config.get("mode", "laptop")).lower() == "hpc"
 PLATFORM = str(config.get("platform", "short")).lower()
