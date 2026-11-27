@@ -6,12 +6,12 @@ An end-to-end **Snakemake**, **Python**, **SciPy**, and **PyTorch (`GATv2`)** bi
 
 ## Key Features
 
-* **Adaptive Compute Profiles (`mode=laptop|hpc`):** Automatically scales CPU threads, RAM caps (`--limitBAMsortRAM`, `--genomeSAsparseD`), node-local scratch (`$TMPDIR`), and Slurm cluster submission (`profiles/slurm/config.yaml`) from an 8 GB laptop to a multi-node HPC cluster.
+* **Adaptive Compute Profiles (`mode=laptop|hpc`):** Automatically scales CPU threads, RAM caps (`--limitBAMsortRAM`, `--genomeSAsparseD`), node-local scratch (`$TMPDIR`), and Slurm cluster execution from an 8 GB laptop to a multi-node HPC cluster.
 * **Multi-Platform RNA-seq Support (`platform=short|long`):**
   * **Short-Read Illumina (`platform=short`):** `fastp` QC (with automatic read-length detection) $\rightarrow$ `STAR` splice-aware alignment $\rightarrow$ two-group differential `rMATS-turbo` (`--b1` Control vs. `--b2` Treatment, computing $\Delta\text{PSI}$ and $\text{FDR}$).
   * **Long-Read PacBio HiFi & ONT (`platform=long`):** `minimap2` (`-ax splice:hq` or `-ax splice`) $\rightarrow$ `IsoQuant` (`mode=hpc`) / `StringTie2 -L` (`mode=laptop`) isoform quantification $\rightarrow$ `SUPPA2` event-level $\text{PSI}$.
 * **5-State Co-Transcriptional ODE & Closed-Form Solver (`src/splicing_ode.py`):** Models sequential multi-exon commitment ($P_1 \rightarrow P_2 \rightarrow P_3 \rightarrow M_{\text{inc}}$ vs. $M_{\text{skip}}$), cooperative Hill binding kinetics, isoform-specific mRNA degradation ($k_{\text{deg,inc}} \neq k_{\text{deg,skip}}$), and $O(1)$ closed-form analytical inversion.
-* **Hybrid Splice-Graph GNN + ODE (`src/gnn_kinetics.py`):** Pure-PyTorch 2-layer Graph Attention (`GATv2`) network over exon–junction splice graphs coupled to a differentiable 5-state ODE steady-state layer (`--backend auto|scipy|gnn`).
+* **Hybrid Splice-Graph GNN + ODE (`src/gnn_kinetics.py`):** Pure-PyTorch 2-layer Graph Attention (`GATv2`) network over genomic exon–junction splice graphs coupled to a differentiable 5-state ODE steady-state layer (`--backend auto|scipy|gnn`).
 
 ---
 
@@ -67,7 +67,7 @@ snakemake --cores 2 --jobs 1 --config \
 
 ### 4. Full-Genome HPC Cluster Execution (`mode=hpc`, Slurm)
 ```bash
-snakemake --profile profiles/slurm --config \
+snakemake --executor slurm --jobs 32 --config \
   mode=hpc \
   platform=short \
   control_samples="CTRL_1,CTRL_2" \
@@ -87,7 +87,7 @@ snakemake --profile profiles/slurm --config \
 | **Short-Read `FOXK2`** (`exon_82582740-82582934`) | **SciPy** (`closed-form`) | `0.990 -> 0.714` | `5.000 -> 1.289` | `0.200 / 0.200` (Fixed) | `0.67 / 0.44 / 0.13` |
 | **Short-Read `FOXK2`** (`exon_82582740-82582934`) | **PyTorch GNN** (`GATv2`) | `0.990 -> 0.714` | `4.975 -> 0.610` | `0.132 / 0.304` (Learned) | `0.82 / 0.65 / 0.26` |
 | **Long-Read `SPATA20`** (`SE:50547285-50548283`) | **SciPy** (`closed-form`) | `0.500 -> 0.990` | `0.578 -> 5.000` | `0.200 / 0.200` (Fixed) | `0.67 / 0.44 / 0.13` |
-| **Long-Read `SPATA20`** (`SE:50547285-50548283`) | **PyTorch GNN** (`GATv2`) | `0.500 -> 0.990` | `0.425 -> 4.992` | `0.115 / 0.262` (Learned) | `0.82 / 0.65 / 0.26` |
+| **Long-Read `SPATA20`** (`SE:50547285-50548283`) | **PyTorch GNN** (`GATv2`) | `0.500 -> 0.990` | `0.518 -> 4.939` | `0.171 / 0.199` (Learned) | `0.70 / 0.48 / 0.15` |
 
 ---
 
@@ -98,4 +98,3 @@ snakemake --profile profiles/slurm --config \
 
 ### Long-Read PacBio HiFi (`SPATA20`, Splice-Graph `GATv2` + 5-State ODE)
 ![SPATA20 Splicing Dynamics](results/hg38_chr17_long/SPATA20_splicing_dynamics.png)
-
