@@ -129,6 +129,11 @@ def fit_events_pytorch(
     mask = torch.tensor(mask_matrix, dtype=torch.float32, device=device)
 
     model = HybridSpliceGNN_ODE(node_feat_dim=feat_dim, n_samples=n_samples).to(device)
+    if init_sf is not None:
+        p_init = np.clip((init_sf - 0.01) / 4.99, 1e-3, 1.0 - 1e-3)
+        with torch.no_grad():
+            model.sf_head.bias.copy_(torch.tensor(np.log(p_init / (1.0 - p_init)).mean(axis=0), dtype=torch.float32, device=device))
+        
     opt = torch.optim.Adam(model.parameters(), lr=lr)
 
     for _ in range(epochs):
