@@ -7,10 +7,13 @@ An end-to-end **Snakemake**, **Python**, **SciPy**, and **PyTorch (`GATv2`)** bi
 ## Key Features
 
 * **Adaptive Compute Profiles (`mode=laptop|hpc`):** Automatically scales CPU threads, RAM caps (`--limitBAMsortRAM`, `--genomeSAsparseD`), node-local scratch (`$TMPDIR`), and Slurm cluster execution from an 8 GB laptop to a multi-node HPC cluster.
+  
 * **Multi-Platform RNA-seq Support (`platform=short|long`):**
   * **Short-Read Illumina (`platform=short`):** `fastp` QC (with automatic read-length detection) $\rightarrow$ `STAR` splice-aware alignment $\rightarrow$ two-group differential `rMATS-turbo` (`--b1` Control vs. `--b2` Treatment, computing $\Delta\text{PSI}$ and $\text{FDR}$).
   * **Long-Read PacBio HiFi & ONT (`platform=long`):** `minimap2` (`-ax splice:hq` or `-ax splice`) $\rightarrow$ `IsoQuant` (`mode=hpc`) / `StringTie2 -L` (`mode=laptop`) isoform quantification $\rightarrow$ `SUPPA2` event-level $\text{PSI}$.
+    
 * **5-State Co-Transcriptional ODE & Closed-Form Solver (`src/splicing_ode.py`):** Models sequential multi-exon commitment ($P_1 \rightarrow P_2 \rightarrow P_3 \rightarrow M_{\text{inc}}$ vs. $M_{\text{skip}}$), cooperative Hill binding kinetics, isoform-specific mRNA degradation ($k_{\text{deg,inc}} \neq k_{\text{deg,skip}}$), and $O(1)$ closed-form analytical inversion.
+  
 * **Hybrid Splice-Graph GNN + ODE (`src/gnn_kinetics.py`):** Pure-PyTorch 2-layer Graph Attention (`GATv2`) network over genomic exon–junction splice graphs coupled to a differentiable 5-state ODE steady-state layer (`--backend auto|scipy|gnn`).
 
 ---
